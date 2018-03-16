@@ -6,12 +6,29 @@ Add your answers inline, below, with your pull request.
 
 1. List all of the main states a process may be in at any point in time on a
    standard Unix system. Briefly explain what each of these states mean.
+   * READY: The process is loaded into main memory and waiting to be executed by the CPU. Usually stored in a ready queue, many processes can be ready at the same time.
+   * RUNNING: The process is executed by the CPU. There can only be one running process per core.
+   * BLOCKED: The process is waiting for something to happen - an event or a change in state - in order to be ready for execution. Once the process receives the thing it needs it can then be executed.
 
 2. What is a Zombie Process? How does it get created? How does it get destroyed?
 
+    A zombie process is a  process that eats brains. Or, a process that has been executed but still has an entry in the process table. The entry is left in the table to report to the parent process that it's completed. Once the parent process reads the exit status the child process is removed from the process table.
+
+    A child process **always** becomes a zombie prior to being removed from the process table.
+
+
+
 3. Describe the job of the Scheduler in the OS in general.
+    
+    The scheduler's whole purpose and reason for being is to decide which process is executed next. This decision is made by employing an algorithm. Popular algorithms for this task include FIFO, Shortest Job First, and Round Robin.
 
 4. Describe the benefits of the MLFQ over a plain Round-Robin scheduler.
+
+    The Round Robin approach is very fair but can cost performance because the CPU is only doing a bit at a time for every process rather than finishing one process before moving on to the next. The Round Robin is the Oprah of processes - equally generous to everyone but never really taking a stance on the issue.
+
+    The best approach is one that optimizes both response time (how soon the process gets attention from the CPU) and turnaround time (how soon the processes are completed). One of the better solutions to this is the MLFQ. The MLFQ assigns priority levels to individual processes, based upon how the process behaves - it learns from observing behavior. Priority level is primarily set according to how the processes uses the CPU - a project that requires continued input will release the CPU while waiting and come back to the CPU when it has what it needs to proceed. These processes are given high priority because each need for input, each next step must be accomplished quickly. Because the CPU is used in shorter bursts, processes can share the CPU, using it in turns as they need it. If a process is going to hog a lot of CPU for a long time it is given a lower priority to use the CPU more efficiently. Processes are put into queues by priority level and the CPU makes decisions based on the queue a process is in. 
+
+
 
 ## Programming Exercise: The Lambda School Shell (`lssh`)
 
